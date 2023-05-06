@@ -243,64 +243,6 @@ fun HomeScreen(modifier: Modifier = Modifier, navController:NavController) {
     }
 }
 
-/*
-Button(
-onClick = {
-    currentText = truths.random()
-    isTruth = true
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        vibrator.vibrate(
-            VibrationEffect.createOneShot(80, 255)
-        )
-    } else {
-        @Suppress("DEPRECATION")
-        vibrator.vibrate(80)
-    }
-},
-modifier = Modifier
-    .align(Alignment.BottomStart)
-    .offset(x = (20).dp)
-    .offset(y = (-90).dp)
-    .height(50.dp)
-    .width(170.dp),
-shape = RoundedCornerShape(50),
-colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary ),
-)
-{
-Text(stringResource(R.string.truth), fontSize = 25.sp)
-}
-
-Button(
-onClick = {
-    var newDare: String
-    do {
-        newDare = dares.random()
-    } while (newDare == currentText && !isTruth)
-    currentText = newDare
-    isTruth = false
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        vibrator.vibrate(
-            VibrationEffect.createOneShot(80, 255)
-        )
-    } else {
-        @Suppress("DEPRECATION")
-        vibrator.vibrate(80)
-    }
-},
-modifier = Modifier
-    .align(Alignment.BottomEnd)
-    .align(Alignment.BottomCenter)
-    .offset(x = (-20).dp)
-    .offset(y = (-90).dp)
-    .height(50.dp)
-    .width(170.dp),
-shape = RoundedCornerShape(50),
-colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary ),
-) {
-Text(stringResource(R.string.dare), fontSize = 25.sp)
-}
-*/
-
 
 
 
