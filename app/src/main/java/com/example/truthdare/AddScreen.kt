@@ -42,6 +42,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddScreen(navController: NavController) {
@@ -52,6 +53,7 @@ fun AddScreen(navController: NavController) {
     val options = listOf("Truth", "Dare")
     var expanded by remember { mutableStateOf(false) }
     var selectedOptionText by remember { mutableStateOf(options[0]) }
+
 
     MaterialTheme {
         Scaffold(
@@ -146,5 +148,50 @@ fun AddScreenPreview() {
 }
 
 /*
-
+fun AddScreen(navController: NavController) {
+    var text by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(TextFieldValue("example", TextRange(0, 7)))
+    }
+    val options = listOf("Truth", "Dare")
+    var expanded by remember { mutableStateOf(false) }
+    var selectedOptionText by remember { mutableStateOf(options[0]) }
+    Scaffold(
+        content = { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+            ) {
+                ExposedDropdownMenuBox(
+                    expanded = expanded,
+                    onExpandedChange = { expanded = !expanded },
+                ) {
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .width(360.dp)
+                            .menuAnchor(),
+                        value = selectedOptionText,
+                        onValueChange = {},
+                    )
+                    ExposedDropdownMenu(expanded = expanded,
+                        onDismissRequest = { expanded = false }) {
+                        options.forEach { selectedOption ->
+                            DropdownMenuItem(text = { Text(selectedOption) },
+                                onClick = {
+                                    selectedOptionText = selectedOption
+                                    expanded = false
+                                },
+                            )
+                        }
+                    }
+                }
+                TextField(value = text,
+                    onValueChange = { text = it },
+                    label = { Text("Label") },
+                    modifier = Modifier.width(360.dp)
+                )
+            }
+        },
+    )
+}
 */
