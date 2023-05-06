@@ -38,6 +38,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
@@ -54,6 +55,12 @@ fun AddScreen(navController: NavController) {
     var expanded by remember { mutableStateOf(false) }
     var selectedOptionText by remember { mutableStateOf(options[0]) }
 
+    val viewModel = viewModel<TruthOrDareViewModel>()
+    if (selectedOptionText == "Truth") {
+        viewModel.truths.add(text.text)
+    } else {
+        viewModel.dares.add(text.text)
+    }
 
     MaterialTheme {
         Scaffold(

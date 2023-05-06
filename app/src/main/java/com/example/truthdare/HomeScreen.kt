@@ -47,7 +47,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import kotlin.random.Random
-import com.example.truthdare.TruthOrDareViewModel
 
 
 @Preview
@@ -64,16 +63,19 @@ fun HomeScreenPreview() {
 fun HomeScreen(modifier: Modifier = Modifier, navController:NavController) {
     val context = LocalContext.current
     val viewModel = viewModel<TruthOrDareViewModel>(factory = object : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return TruthOrDareViewModel(context) as T
         }
     })
+
     val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-    val truths = context.resources.getStringArray(R.array.truths)
-    val dares = context.resources.getStringArray(R.array.dares)
+    val truths = viewModel.truths
+    val dares = viewModel.dares
     var currentText by remember { mutableStateOf(truths[0]) }
     var isTruth by remember { mutableStateOf(true) }
     var consecutiveCount by remember { mutableStateOf(0) }
+
+
 
     MaterialTheme {
         Scaffold(
