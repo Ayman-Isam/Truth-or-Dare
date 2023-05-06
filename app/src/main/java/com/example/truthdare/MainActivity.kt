@@ -15,10 +15,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TruthDareTheme {
-
                 navController = rememberNavController()
                 SetupNavGraph(navController = navController)
-
             }
         }
     }
