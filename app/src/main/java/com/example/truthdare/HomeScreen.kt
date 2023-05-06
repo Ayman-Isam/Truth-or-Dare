@@ -47,6 +47,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import kotlin.random.Random
+import com.example.truthdare.TruthOrDareViewModel
 
 
 @Preview
