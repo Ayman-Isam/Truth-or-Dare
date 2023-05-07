@@ -1,36 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="truths">
-        <item>"Would you swallow or spit"</item>
-        <item>"Your lover has been magically transformed into an animal, and the only way to restore your lover is to mate with them. Here's the question: Which animal would cause you the least psychological damage?"</item>
-        <item>"If you could be born again would choose to be a different sex to what you are? Why?"</item>
-        <item>"Who is the second most attractive person here"</item>
-        <item>"Who in this group  would you marry, fuck and kill"</item>
-        <item>" Would you rather fuck a goat and have nobody ever find out, or not have to fuck a goat but have everyone think that you did."</item>
-        <item>" Have you ever had sexual thoughts or dreams about anyone in the room."</item>
-        <item>"Your plane crashes on an island, and only you and the girls here survive. You must choose one to FUCK (and you can only fuck her), one to TALK to you (and go hunt food with you), and one to stay in the tent you built to COOK. "</item>
-        <item>"Who do you think in the group has the smallest and largest penis"</item>
-        <item>"What's the nicest thing anyone has ever done for you?"</item>
-        <item>"What moment of your life were you most truly happy?"</item>
-        <item>"Would you rather sit on a dick and eat cake or sit on a cake and eat dick"</item>
-        <item>"Who in this room would you be most embarrassed to introduce to your parents?"</item>
-        <item>"How many people in this room would you date"</item>
+        <item>"What is the most embarrassing thing that has ever happened to you?"</item>
+        <item>"Have you ever lied to your best friend?"</item>
+        <item>"What is the biggest secret you have kept from your parents?"</item>
+        <item>"Have you ever cheated on a test?"</item>
+        <item>"What is the most childish thing you still do?"</item>
+        <item>"Have you ever stolen something?"</item>
+        <item>"What is the worst thing you have ever done to someone?"</item>
+        <item>"Have you ever been in love with someone who didn’t love you back?"</item>
+        <item>"What is the biggest lie you have ever told?"</item>
+        <item>"Have you ever broken the law?"</item>
+        <item>"What is the most embarrassing thing in your room right now?"</item>
+        <item>"Have you ever been caught doing something you shouldn’t have been doing?"</item>
+        <item>"What is the worst date you have ever been on?"</item>
+        <item>"Have you ever had a crush on a teacher?"</item>
+        <item>"What is the most embarrassing thing in your browser history right now?"</item>
+        <item>"Have you ever pretended to be someone else online?"</item>
+        <item>"What is the worst thing you have ever said to someone?"</item>
+        <item>"Have you ever lied about your age?"</item>
+        <item>"What is the most embarrassing thing in your closet right now?"</item>
     </string-array>
     <string-array name="dares">
-        <item>"Do your best impression of a baby being born."</item>
-        <item>"Rate everyone here 1-10 in terms of personality."</item>
-        <item>"Curse as badly as you can for 20 seconds."</item>
-        <item>"Pretend to date someone for a day."</item>
-        <item>"Name one thing you would change about each person here."</item>
-        <item>"Show everyone here your youtube history"</item>
-        <item>"Exchange a clothing item with the player of opposite gender. (Jackets don't count)"</item>
-        <item>"Give a person in this group a foot massage"</item>
-        <item>"Let the group pose you in an embarrassing position and take a picture."</item>
-        <item>"Text to your bff 'I kinda have a crush on you wanna go out?' And don't reply to any of their messages."</item>
-        <item>"Go up to someone and reciet a copy paste that is choosen by the group "</item>
-        <item>"Put you head on the lap of the person to your right for a minute"</item>
-        <item>"Touch noses with another person (picked by asker) for 60 seconds straight. No closing eyes."</item>
-        <item>"Unzip someone of the opposite sex's pants with their teeth"</item>
-        <item>"For the rest of the night, you must no longer speak using any form of the verb “to be.” So: is, am, was, were, are… among others, no longer in your vocabulary. Including contractions (you can’t say “I’m” since it’s just “I am”"</item>
+        <item>"Call a random contact and sing them a song."</item>
+        <item>"Do an impression of your favorite celebrity."</item>
+        <item>"Eat a spoonful of hot sauce."</item>
+        <item>"Do 20 jumping jacks."</item>
+        <item>"Text your crush and tell them how you feel."</item>
+        <item>"Do a silly dance for one minute."</item>
+        <item>"Wear your clothes inside out for the rest of the game."</item>
+        <item>"Do an impression of a farm animal for one minute."</item>
+        <item>"Eat a spoonful of mustard."</item>
+        <item>"Do 10 push-ups."</item>
+        <item>"Sing a song in a public place."</item>
+        <item>"Do a cartwheel."</item>
+        <item>"Wear a silly hat for the rest of the game."</item>
+        <item>"Do an impression of a cartoon character for one minute."</item>
+        <item>"Eat a spoonful of peanut butter without water."</item>
+        <item>"Do 10 sit-ups."</item>
+        <item>"Wear your shoes on your hands for the rest of the game."</item>
+        <item>"Do an impression of an opera singer for one minute."</item>
+        <item>"Eat a spoonful of ketchup."</item>
+        <item>"Do 10 squats."</item>
     </string-array>
 </resources>
