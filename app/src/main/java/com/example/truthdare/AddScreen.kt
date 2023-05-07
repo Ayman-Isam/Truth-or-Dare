@@ -35,15 +35,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,7 +51,8 @@ fun AddScreen(
     navController: NavController,
     truths: MutableList<String>,
     dares: MutableList<String>,
-    repository: TruthOrDareRepository
+    repository: TruthOrDareRepository,
+    lifecycleScope: LifecycleCoroutineScope
 ) {
     var text by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue("example", TextRange(0, 7)))
@@ -146,15 +146,18 @@ fun AddScreen(
                         modifier = Modifier.width(360.dp)
                     )
                     Button(onClick = {
-                        if (selectedOptionText == "Truth") {
-                            repository.insert(TruthOrDare(text = text.text, isTruth = true))
-                        } else if (selectedOptionText == "Dare") {
-                            repository.insert(TruthOrDare(text = text.text, isTruth = false))
+                        lifecycleScope.launch {
+                            if (selectedOptionText == "Truth") {
+                                repository.insert(TruthOrDare(text = text.text, isTruth = true))
+                            } else if (selectedOptionText == "Dare") {
+                                repository.insert(TruthOrDare(text = text.text, isTruth = false))
+                            }
+                            text = TextFieldValue("")
                         }
-                        text = TextFieldValue("")
                     }) {
                         Text("Add")
                     }
+
 
                 }
             },
@@ -162,20 +165,6 @@ fun AddScreen(
     }
 }
 
-@Composable
-@Preview(showBackground = true)
-fun AddScreenPreview() {
-    val context = LocalContext.current
-    val repository = TruthOrDareRepository(context)
-    val truths = mutableListOf("Truth 1", "Truth 2")
-    val dares = mutableListOf("Dare 1", "Dare 2")
-    AddScreen(
-        navController = rememberNavController(),
-        truths = truths,
-        dares = dares,
-        repository = repository
-    )
-}
 
 /*
 content = { innerPadding ->

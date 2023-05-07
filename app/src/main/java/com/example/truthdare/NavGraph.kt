@@ -24,7 +24,7 @@ fun SetupNavGraph(
         composable(
             route = Screen.Add.route
         ) {
-            AddScreen(navController = navController, truths = truths, dares = dares, repository = repository)
+            AddScreen(navController = navController, truths = truths, dares = dares, repository = repository, lifecycleScope = lifecycleScope)
         }
     }
 }
