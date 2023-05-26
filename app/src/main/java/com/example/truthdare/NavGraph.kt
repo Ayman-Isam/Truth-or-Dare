@@ -7,7 +7,10 @@ import androidx.navigation.compose.composable
 
 @Composable
 fun SetupNavGraph(
-    navController: NavHostController
+    navController: NavHostController,
+    truths: MutableList<String>,
+    dares: MutableList<String>,
+    repository: TruthOrDareRepository
 ) {
     NavHost(
         navController = navController,
@@ -16,12 +19,12 @@ fun SetupNavGraph(
         composable(
             route = Screen.Home.route
         ) {
-            HomeScreen(navController = navController)
+            HomeScreen(navController = navController, truths = truths, dares = dares)
         }
         composable(
             route = Screen.Add.route
         ) {
-            AddScreen(navController = navController)
+            AddScreen(navController = navController, truths = truths, dares = dares, repository = repository, lifecycleScope = lifecycleScope)
         }
     }
 }

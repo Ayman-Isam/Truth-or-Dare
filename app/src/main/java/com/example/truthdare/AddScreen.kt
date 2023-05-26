@@ -7,10 +7,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,17 +38,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddScreen(navController: NavController) {
+fun AddScreen(
+    navController: NavController,
+    truths: MutableList<String>,
+    dares: MutableList<String>,
+    repository: TruthOrDareRepository,
+    lifecycleScope: LifecycleCoroutineScope
+) {
     var text by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue("example", TextRange(0, 7)))
     }
@@ -55,13 +62,6 @@ fun AddScreen(navController: NavController) {
     var expanded by remember { mutableStateOf(false) }
     var selectedOptionText by remember { mutableStateOf(options[0]) }
 
-    val viewModel = viewModel<TruthOrDareViewModel>()
-    if (selectedOptionText == "Truth") {
-        viewModel.truths.add(text.text)
-    } else {
-        viewModel.dares.add(text.text)
-    }
-
     MaterialTheme {
         Scaffold(
             topBar = {
@@ -69,7 +69,10 @@ fun AddScreen(navController: NavController) {
                     containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp)
                 ), title = {
                     Text(
-                        "Add Truths or Dares", maxLines = 1, overflow = TextOverflow.Ellipsis
+                        "Add Truths or Dares",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        fontSize = 24.sp
                     )
                 }, navigationIcon = {
                     IconButton(onClick = {
@@ -81,14 +84,16 @@ fun AddScreen(navController: NavController) {
                     }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Localized description"
+                            contentDescription = "Localized description",
+                            modifier = Modifier.size(24.dp)
                         )
                     }
                 }, actions = {
                     IconButton(onClick = { /* doSomething() */ }) {
                         Icon(
-                            imageVector = Icons.Filled.Favorite,
-                            contentDescription = "Localized description"
+                            imageVector = Icons.Filled.Edit,
+                            contentDescription = "Localized description",
+                            modifier = Modifier.size(24.dp)
                         )
                     }
                 })
@@ -140,65 +145,78 @@ fun AddScreen(navController: NavController) {
                         label = { Text("Label") },
                         modifier = Modifier.width(360.dp)
                     )
+                    Button(onClick = {
+                        lifecycleScope.launch {
+                            if (selectedOptionText == "Truth") {
+                                repository.insert(TruthOrDare(text = text.text, isTruth = true))
+                            } else if (selectedOptionText == "Dare") {
+                                repository.insert(TruthOrDare(text = text.text, isTruth = false))
+                            }
+                            text = TextFieldValue("")
+                        }
+                    }) {
+                        Text("Add")
+                    }
+
+
                 }
             },
         )
     }
 }
 
-@Composable
-@Preview(showBackground = true)
-fun AddScreenPreview() {
-    AddScreen(
-        navController = rememberNavController()
-    )
-}
 
 /*
-fun AddScreen(navController: NavController) {
-    var text by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-        mutableStateOf(TextFieldValue("example", TextRange(0, 7)))
-    }
-    val options = listOf("Truth", "Dare")
-    var expanded by remember { mutableStateOf(false) }
-    var selectedOptionText by remember { mutableStateOf(options[0]) }
-    Scaffold(
-        content = { innerPadding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-            ) {
-                ExposedDropdownMenuBox(
-                    expanded = expanded,
-                    onExpandedChange = { expanded = !expanded },
-                ) {
-                    OutlinedTextField(
-                        modifier = Modifier
-                            .width(360.dp)
-                            .menuAnchor(),
-                        value = selectedOptionText,
-                        onValueChange = {},
-                    )
-                    ExposedDropdownMenu(expanded = expanded,
-                        onDismissRequest = { expanded = false }) {
-                        options.forEach { selectedOption ->
-                            DropdownMenuItem(text = { Text(selectedOption) },
-                                onClick = {
-                                    selectedOptionText = selectedOption
-                                    expanded = false
-                                },
-                            )
-                        }
-                    }
-                }
-                TextField(value = text,
-                    onValueChange = { text = it },
-                    label = { Text("Label") },
-                    modifier = Modifier.width(360.dp)
+content = { innerPadding ->
+Column(
+    modifier = Modifier
+        .fillMaxSize()
+        .padding(innerPadding),
+    verticalArrangement = Arrangement.Top,
+    horizontalAlignment = Alignment.CenterHorizontally
+) {
+    Spacer(modifier = Modifier.height(20.dp))
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded },
+    ) {
+
+        OutlinedTextField(
+            modifier = Modifier
+                .width(360.dp)
+                .menuAnchor(),
+            readOnly = true,
+            value = selectedOptionText,
+            onValueChange = {},
+            label = { Text("Category") },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
+        )
+        ExposedDropdownMenu(expanded = expanded,
+            onDismissRequest = { expanded = false }) {
+            options.forEach { selectedOption ->
+                DropdownMenuItem(text = { Text(selectedOption) },
+                    onClick = {
+                        selectedOptionText = selectedOption
+                        expanded = false
+                    },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
                 )
             }
-        },
+        }
+    }
+    val spacerHeight by animateDpAsState(targetValue = if (expanded) 120.dp else 0.dp)
+
+    Spacer(modifier = Modifier.height(spacerHeight))
+    Spacer(modifier = Modifier.height(20.dp))
+    TextField(value = text,
+        onValueChange = { text = it },
+        label = { Text("Label") },
+        modifier = Modifier.width(360.dp)
     )
+    Button(onClick = { addText(text.text) }) {
+        Text("Add")
+    }
 }
+},
 */

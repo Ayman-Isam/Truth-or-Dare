@@ -3,8 +3,43 @@
     <string-array name="truths">
         <item>"What is the most embarrassing thing that has ever happened to you?"</item>
         <item>"Have you ever lied to your best friend?"</item>
+        <item>"What is the biggest secret you have kept from your parents?"</item>
+        <item>"Have you ever cheated on a test?"</item>
+        <item>"What is the most childish thing you still do?"</item>
+        <item>"Have you ever stolen something?"</item>
+        <item>"What is the worst thing you have ever done to someone?"</item>
+        <item>"Have you ever been in love with someone who didn’t love you back?"</item>
+        <item>"What is the biggest lie you have ever told?"</item>
+        <item>"Have you ever broken the law?"</item>
+        <item>"What is the most embarrassing thing in your room right now?"</item>
+        <item>"Have you ever been caught doing something you shouldn’t have been doing?"</item>
+        <item>"What is the worst date you have ever been on?"</item>
+        <item>"Have you ever had a crush on a teacher?"</item>
+        <item>"What is the most embarrassing thing in your browser history right now?"</item>
+        <item>"Have you ever pretended to be someone else online?"</item>
+        <item>"What is the worst thing you have ever said to someone?"</item>
+        <item>"Have you ever lied about your age?"</item>
+        <item>"What is the most embarrassing thing in your closet right now?"</item>
     </string-array>
     <string-array name="dares">
+        <item>"Call a random contact and sing them a song."</item>
+        <item>"Do an impression of your favorite celebrity."</item>
+        <item>"Eat a spoonful of hot sauce."</item>
+        <item>"Do 20 jumping jacks."</item>
+        <item>"Text your crush and tell them how you feel."</item>
+        <item>"Do a silly dance for one minute."</item>
+        <item>"Wear your clothes inside out for the rest of the game."</item>
+        <item>"Do an impression of a farm animal for one minute."</item>
+        <item>"Eat a spoonful of mustard."</item>
+        <item>"Do 10 push-ups."</item>
+        <item>"Sing a song in a public place."</item>
+        <item>"Do a cartwheel."</item>
+        <item>"Wear a silly hat for the rest of the game."</item>
+        <item>"Do an impression of a cartoon character for one minute."</item>
+        <item>"Eat a spoonful of peanut butter without water."</item>
+        <item>"Do 10 sit-ups."</item>
+        <item>"Wear your shoes on your hands for the rest of the game."</item>
+        <item>"Do an impression of an opera singer for one minute."</item>
         <item>"Eat a spoonful of ketchup."</item>
         <item>"Do 10 squats."</item>
     </string-array>
