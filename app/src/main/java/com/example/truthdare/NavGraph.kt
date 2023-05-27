@@ -3,6 +3,7 @@ package com.example.truthdare
 import ViewScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.LifecycleCoroutineScope
@@ -15,6 +16,10 @@ fun SetupNavGraph(
     navController: NavHostController,
     truths: MutableList<String>,
     dares: MutableList<String>,
+    initialTruths: List<TruthOrDare>,
+    initialDares: List<TruthOrDare>,
+    truthsState: MutableState<List<TruthOrDare>>,
+    daresState: MutableState<List<TruthOrDare>>,
     repository: TruthOrDareRepository,
     lifecycleScope: LifecycleCoroutineScope,
 ) {
@@ -45,10 +50,11 @@ fun SetupNavGraph(
 
             ViewScreen(
                 navController = navController,
-                truths = truthsState.value,
-                dares = daresState.value,
+                initialTruths = truthsState.value,
+                initialDares = daresState.value,
                 repository = repository
             )
         }
+
     }
 }

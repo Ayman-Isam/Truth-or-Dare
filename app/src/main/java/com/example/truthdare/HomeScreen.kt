@@ -1,9 +1,5 @@
 package com.example.truthdare
 
-import android.content.Context
-import android.os.Build
-import android.os.VibrationEffect
-import android.os.Vibrator
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -69,7 +65,6 @@ fun HomeScreen(
    dares: MutableList<String>
 ) {
     val context = LocalContext.current
-    val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     var currentText by remember { mutableStateOf("") }
     var isTruth by remember { mutableStateOf(true) }
     var consecutiveCount by remember { mutableStateOf(0) }
@@ -138,14 +133,6 @@ fun HomeScreen(
                             } while (newTruth == currentText)
                             currentText = newTruth
                             isTruth = true
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                vibrator.vibrate(
-                                    VibrationEffect.createOneShot(80, 255)
-                                )
-                            } else {
-                                @Suppress("DEPRECATION")
-                                vibrator.vibrate(80)
-                            }
                         },
                         modifier = Modifier
                             .align(Alignment.BottomStart)
@@ -168,14 +155,6 @@ fun HomeScreen(
                             } while (newDare == currentText && !isTruth)
                             currentText = newDare
                             isTruth = false
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                vibrator.vibrate(
-                                    VibrationEffect.createOneShot(80, 255)
-                                )
-                            } else {
-                                @Suppress("DEPRECATION")
-                                vibrator.vibrate(80)
-                            }
                         },
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
@@ -227,14 +206,6 @@ fun HomeScreen(
                                     }
                                     isTruth = false
                                 }
-                            }
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                vibrator.vibrate(
-                                    VibrationEffect.createOneShot(80, 255)
-                                )
-                            } else {
-                                @Suppress("DEPRECATION")
-                                vibrator.vibrate(80)
                             }
                         },
                         modifier = Modifier

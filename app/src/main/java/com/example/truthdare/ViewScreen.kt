@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,10 +21,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,8 +48,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun ViewScreen(
     navController: NavController,
-    truths: List<TruthOrDare>,
-    dares: List<TruthOrDare>,
+    initialTruths: List<TruthOrDare>,
+    initialDares: List<TruthOrDare>,
     repository: TruthOrDareRepository
 ) {
     var selectedTabIndex by remember { mutableStateOf(0) }
@@ -113,8 +117,8 @@ fun ViewScreen(
                     }
 
                     when (selectedTabIndex) {
-                        0 -> TruthsList(truths.value, repository, onDelete)
-                        1 -> DaresList(dares.value, repository, onDelete)
+                        0 -> TruthsList(truths.value, repository, onDelete, truths, dares)
+                        1 -> DaresList(dares.value, repository, onDelete, truths, dares)
                     }
                 }
             },
@@ -146,10 +150,30 @@ fun ViewScreen(
 fun TruthsList(
     truths: List<TruthOrDare>,
     repository: TruthOrDareRepository,
-    onDelete: (TruthOrDare) -> Unit
+    onDelete: (TruthOrDare) -> Unit,
+    truthsState: MutableState<List<TruthOrDare>>,
+    daresState: MutableState<List<TruthOrDare>>
 ){
-
     val coroutineScope = rememberCoroutineScope()
+    var truthOrDareToEdit by remember { mutableStateOf<TruthOrDare?>(null) }
+
+    if (truthOrDareToEdit != null) {
+        EditTruthOrDareDialog(
+            truthOrDare = truthOrDareToEdit!!,
+            onEdit = { truthOrDare ->
+                coroutineScope.launch {
+                    repository.update(truthOrDare)
+                    truthOrDareToEdit = null
+                    if (truthOrDare.isTruth) {
+                        truthsState.value = repository.getTruths()
+                    } else {
+                        daresState.value = repository.getDares()
+                    }
+                }
+            },
+            onDismiss = { truthOrDareToEdit = null }
+        )
+    }
 
     LazyColumn() {
         items(truths.size) { index ->
@@ -169,11 +193,7 @@ fun TruthsList(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 IconButton(onClick = {
-                    // Launch a new coroutine using the CoroutineScope
-                    coroutineScope.launch {
-                        val truthOrDareToUpdate = item.copy(text = "Updated text")
-                        repository.update(truthOrDareToUpdate)
-                    }
+                    truthOrDareToEdit = item
                 }) {
                     Icon(
                         imageVector = Icons.Filled.Edit,
@@ -198,14 +218,37 @@ fun TruthsList(
     }
 }
 
+
 @Composable
 fun DaresList(
     dares: List<TruthOrDare>,
     repository: TruthOrDareRepository,
-    onDelete: (TruthOrDare) -> Unit
+    onDelete: (TruthOrDare) -> Unit,
+    truthsState: MutableState<List<TruthOrDare>>,
+    daresState: MutableState<List<TruthOrDare>>
 ){
-
     val coroutineScope = rememberCoroutineScope()
+    var truthOrDareToEdit by remember { mutableStateOf<TruthOrDare?>(null) }
+
+
+    if (truthOrDareToEdit != null) {
+        EditTruthOrDareDialog(
+            truthOrDare = truthOrDareToEdit!!,
+            onEdit = { truthOrDare ->
+                coroutineScope.launch {
+                    repository.update(truthOrDare)
+                    truthOrDareToEdit = null
+                    if (truthOrDare.isTruth) {
+                        truthsState.value = repository.getTruths()
+                    } else {
+                        daresState.value = repository.getDares()
+                    }
+                }
+            },
+            onDismiss = { truthOrDareToEdit = null }
+
+        )
+    }
 
     LazyColumn() {
         items(dares.size) { index ->
@@ -225,11 +268,7 @@ fun DaresList(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 IconButton(onClick = {
-                    // Launch a new coroutine using the CoroutineScope
-                    coroutineScope.launch {
-                        val truthOrDareToUpdate = item.copy(text = "Updated text")
-                        repository.update(truthOrDareToUpdate)
-                    }
+                    truthOrDareToEdit = item
                 }) {
                     Icon(
                         imageVector = Icons.Filled.Edit,
@@ -253,4 +292,41 @@ fun DaresList(
             Divider(color = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp))
         }
     }
+}
+
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EditTruthOrDareDialog(
+    truthOrDare: TruthOrDare,
+    onEdit: (TruthOrDare) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var text by remember { mutableStateOf(truthOrDare.text) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(text = "Edit Truth Or Dare") },
+        text = {
+            TextField(
+                value = text,
+                onValueChange = { text = it },
+                label = { Text(text = "Text") }
+            )
+        },
+        confirmButton = {
+            TextButton(onClick = {
+                onEdit(truthOrDare.copy(text = text))
+                onDismiss()
+            }) {
+                Text(text = "Save")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(text = "Cancel")
+            }
+        }
+    )
 }

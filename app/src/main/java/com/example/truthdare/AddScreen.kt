@@ -31,11 +31,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -54,9 +53,8 @@ fun AddScreen(
     repository: TruthOrDareRepository,
     lifecycleScope: LifecycleCoroutineScope
 ) {
-    var text by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-        mutableStateOf(TextFieldValue("example", TextRange(0, 7)))
-    }
+    var text by remember { mutableStateOf(TextFieldValue("")) }
+    var showError by remember { mutableStateOf(false) }
 
     val options = listOf("Truth", "Dare")
     var expanded by remember { mutableStateOf(false) }
@@ -136,23 +134,35 @@ fun AddScreen(
                             }
                         }
                     }
-                    val spacerHeight by animateDpAsState(targetValue = if (expanded) 120.dp else 0.dp)
+                    val spacerHeight by animateDpAsState(targetValue = if (expanded) 120.dp else 10.dp)
 
                     Spacer(modifier = Modifier.height(spacerHeight))
                     Spacer(modifier = Modifier.height(20.dp))
-                    TextField(value = text,
-                        onValueChange = { text = it },
+                    TextField(
+                        value = text,
+                        onValueChange = {
+                            text = it
+                            showError = false
+                        },
                         label = { Text("Label") },
                         modifier = Modifier.width(360.dp)
                     )
+                    if (showError) {
+                        Text("Field cannot be empty", color = Color.Red)
+                    }
+                    Spacer(modifier = Modifier.height(20.dp))
                     Button(onClick = {
-                        lifecycleScope.launch {
-                            if (selectedOptionText == "Truth") {
-                                repository.insert(TruthOrDare(text = text.text, isTruth = true))
-                            } else if (selectedOptionText == "Dare") {
-                                repository.insert(TruthOrDare(text = text.text, isTruth = false))
+                        if (text.text.isEmpty()) {
+                            showError = true
+                        } else {
+                            lifecycleScope.launch {
+                                if (selectedOptionText == "Truth") {
+                                    repository.insert(TruthOrDare(text = text.text, isTruth = true))
+                                } else if (selectedOptionText == "Dare") {
+                                    repository.insert(TruthOrDare(text = text.text, isTruth = false))
+                                }
+                                text = TextFieldValue("")
                             }
-                            text = TextFieldValue("")
                         }
                     }) {
                         Text("Add")
