@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenuItem
@@ -89,9 +89,9 @@ fun AddScreen(
                         )
                     }
                 }, actions = {
-                    IconButton(onClick = { /* doSomething() */ }) {
+                    IconButton(onClick = { navController.navigate(Screen.View.route) }) {
                         Icon(
-                            imageVector = Icons.Filled.Edit,
+                            imageVector = Icons.Filled.List,
                             contentDescription = "Localized description",
                             modifier = Modifier.size(24.dp)
                         )
@@ -157,66 +157,8 @@ fun AddScreen(
                     }) {
                         Text("Add")
                     }
-
-
                 }
             },
         )
     }
 }
-
-
-/*
-content = { innerPadding ->
-Column(
-    modifier = Modifier
-        .fillMaxSize()
-        .padding(innerPadding),
-    verticalArrangement = Arrangement.Top,
-    horizontalAlignment = Alignment.CenterHorizontally
-) {
-    Spacer(modifier = Modifier.height(20.dp))
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded },
-    ) {
-
-        OutlinedTextField(
-            modifier = Modifier
-                .width(360.dp)
-                .menuAnchor(),
-            readOnly = true,
-            value = selectedOptionText,
-            onValueChange = {},
-            label = { Text("Category") },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
-        )
-        ExposedDropdownMenu(expanded = expanded,
-            onDismissRequest = { expanded = false }) {
-            options.forEach { selectedOption ->
-                DropdownMenuItem(text = { Text(selectedOption) },
-                    onClick = {
-                        selectedOptionText = selectedOption
-                        expanded = false
-                    },
-                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
-                )
-            }
-        }
-    }
-    val spacerHeight by animateDpAsState(targetValue = if (expanded) 120.dp else 0.dp)
-
-    Spacer(modifier = Modifier.height(spacerHeight))
-    Spacer(modifier = Modifier.height(20.dp))
-    TextField(value = text,
-        onValueChange = { text = it },
-        label = { Text("Label") },
-        modifier = Modifier.width(360.dp)
-    )
-    Button(onClick = { addText(text.text) }) {
-        Text("Add")
-    }
-}
-},
-*/

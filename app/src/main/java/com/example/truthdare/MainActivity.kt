@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
             setContent {
                 TruthDareTheme {
                     navController = rememberNavController()
-                    SetupNavGraph(navController = navController, truths = truths, dares = dares, repository = repository)
+                    SetupNavGraph(navController = navController, truths = truths, dares = dares, repository = repository, lifecycleScope = lifecycleScope)
                 }
             }
         }
