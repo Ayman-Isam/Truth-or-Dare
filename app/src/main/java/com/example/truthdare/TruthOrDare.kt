@@ -63,4 +63,12 @@ class TruthOrDareRepository(private val context: Context) {
     suspend fun insert(truthOrDare: TruthOrDare) = withContext(Dispatchers.IO) {
         db.truthOrDareDao().insert(truthOrDare)
     }
+    suspend fun update(truthOrDare: TruthOrDare) = withContext(Dispatchers.IO) {
+        db.truthOrDareDao().update(truthOrDare)
+    }
+
+    // Add the delete function
+    suspend fun delete(truthOrDare: TruthOrDare) = withContext(Dispatchers.IO) {
+        db.truthOrDareDao().delete(truthOrDare)
+    }
 }

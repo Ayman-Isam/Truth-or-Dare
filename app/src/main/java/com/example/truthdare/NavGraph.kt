@@ -46,7 +46,8 @@ fun SetupNavGraph(
             ViewScreen(
                 navController = navController,
                 truths = truthsState.value,
-                dares = daresState.value
+                dares = daresState.value,
+                repository = repository
             )
         }
     }
