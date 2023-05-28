@@ -162,6 +162,11 @@ fun AddScreen(
                                     repository.insert(TruthOrDare(text = text.text, isTruth = false))
                                 }
                                 text = TextFieldValue("")
+                                navController.navigate(route = Screen.View.route) {
+                                    popUpTo(Screen.View.route) {
+                                        inclusive = true
+                                    }
+                                }
                             }
                         }
                     }) {

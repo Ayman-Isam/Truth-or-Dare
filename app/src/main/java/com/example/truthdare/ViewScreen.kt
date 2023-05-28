@@ -156,6 +156,8 @@ fun TruthsList(
 ){
     val coroutineScope = rememberCoroutineScope()
     var truthOrDareToEdit by remember { mutableStateOf<TruthOrDare?>(null) }
+    var truthOrDareToDelete by remember { mutableStateOf<TruthOrDare?>(null) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
 
     if (truthOrDareToEdit != null) {
         EditTruthOrDareDialog(
@@ -175,9 +177,33 @@ fun TruthsList(
         )
     }
 
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text(text = "Delete Truth Or Dare") },
+            text = { Text(text = "Are you sure you want to delete this truth or dare?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    coroutineScope.launch {
+                        onDelete(truthOrDareToDelete!!)
+                        showDeleteDialog = false
+                    }
+                }) {
+                    Text(text = "Yes")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text(text = "No")
+                }
+            }
+        )
+    }
+
     LazyColumn() {
         items(truths.size) { index ->
-            val item = truths[index]
+            val reversedIndex = truths.lastIndex - index
+            val item = truths[reversedIndex]
 
             Row(
                 modifier = Modifier.padding(8.dp)
@@ -202,10 +228,8 @@ fun TruthsList(
                 }
 
                 IconButton(onClick = {
-                    coroutineScope.launch {
-                        val truthOrDareToDelete = item
-                        onDelete(truthOrDareToDelete)
-                    }
+                    truthOrDareToDelete = item
+                    showDeleteDialog = true
                 }) {
                     Icon(
                         imageVector = Icons.Filled.Delete,
@@ -217,6 +241,7 @@ fun TruthsList(
         }
     }
 }
+
 
 
 @Composable
@@ -252,7 +277,8 @@ fun DaresList(
 
     LazyColumn() {
         items(dares.size) { index ->
-            val item = dares[index]
+            val reversedIndex = dares.lastIndex - index
+            val item = dares[reversedIndex]
 
             Row(
                 modifier = Modifier.padding(8.dp)
