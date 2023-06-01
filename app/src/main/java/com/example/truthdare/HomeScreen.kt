@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,31 +44,25 @@ import androidx.navigation.compose.rememberNavController
 import kotlin.random.Random
 
 
-@Preview
-@Composable
-fun HomeScreenPreview() {
-    val truths = mutableListOf("Truth 1", "Truth 2")
-    val dares = mutableListOf("Dare 1", "Dare 2")
-    HomeScreen(
-        navController = rememberNavController(),
-        truths = truths,
-        dares = dares
-    )
-}
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-   navController:NavController,
-   truths: MutableList<String>,
-   dares: MutableList<String>
+    navController:NavController,
+    repository: TruthOrDareRepository
 ) {
     val context = LocalContext.current
     var currentText by remember { mutableStateOf("") }
     var isTruth by remember { mutableStateOf(true) }
     var consecutiveCount by remember { mutableStateOf(0) }
+
+    val truths = remember { mutableStateOf(emptyList<String>()) }
+    val dares = remember { mutableStateOf(emptyList<String>()) }
+
+    LaunchedEffect(Unit) {
+        truths.value = repository.getTruths().map { it.text }
+        dares.value = repository.getDares().map { it.text }
+    }
 
     MaterialTheme {
         Scaffold(
@@ -129,7 +124,7 @@ fun HomeScreen(
                         onClick = {
                             var newTruth: String
                             do {
-                                newTruth = truths.random()
+                                newTruth = truths.value.random()
                             } while (newTruth == currentText)
                             currentText = newTruth
                             isTruth = true
@@ -151,7 +146,7 @@ fun HomeScreen(
                         onClick = {
                             var newDare: String
                             do {
-                                newDare = dares.random()
+                                newDare = dares.value.random()
                             } while (newDare == currentText && !isTruth)
                             currentText = newDare
                             isTruth = false
@@ -175,18 +170,18 @@ fun HomeScreen(
                                 if (isTruth) {
                                     var newDare: String
                                     do {
-                                        newDare = dares.random()
+                                        newDare = dares.value.random()
                                     } while (newDare == currentText && !isTruth)
                                     currentText = newDare
                                     isTruth = false
                                 } else {
-                                    currentText = truths.random()
+                                    currentText = truths.value.random()
                                     isTruth = true
                                 }
                                 consecutiveCount = 1
                             } else {
                                 if (Random.nextBoolean()) {
-                                    currentText = truths.random()
+                                    currentText = truths.value.random()
                                     if (isTruth) {
                                         consecutiveCount++
                                     } else {
@@ -196,7 +191,7 @@ fun HomeScreen(
                                 } else {
                                     var newDare: String
                                     do {
-                                        newDare = dares.random()
+                                        newDare = dares.value.random()
                                     } while (newDare == currentText && !isTruth)
                                     currentText = newDare
                                     if (!isTruth) {
