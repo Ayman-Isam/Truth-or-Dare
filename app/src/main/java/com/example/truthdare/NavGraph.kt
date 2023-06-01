@@ -23,6 +23,7 @@ fun SetupNavGraph(
     repository: TruthOrDareRepository,
     lifecycleScope: LifecycleCoroutineScope,
 ) {
+
     NavHost(
         navController = navController,
         startDestination = Screen.Home.route

@@ -1,4 +1,6 @@
 
+import android.view.HapticFeedbackConstants
+import android.view.SoundEffectConstants
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,6 +37,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -57,6 +61,8 @@ fun ViewScreen(
     // Use a MutableState object to hold the list of truths and dares
     val truths = remember { mutableStateOf(emptyList<TruthOrDare>()) }
     val dares = remember { mutableStateOf(emptyList<TruthOrDare>()) }
+    val view = LocalView.current
+
 
     LaunchedEffect(Unit) {
         truths.value = repository.getTruths()
@@ -80,6 +86,8 @@ fun ViewScreen(
                     },
                     navigationIcon = {
                         IconButton(onClick = {
+                            view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                            view.playSoundEffect(SoundEffectConstants.CLICK)
                             navController.navigate(route = Screen.Add.route) {
                                 popUpTo(Screen.Add.route) {
                                     inclusive = true
@@ -129,7 +137,7 @@ fun ViewScreen(
                         containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp)
                     ) {
                         Tab(
-                            text = { Text(text = "Truths")},
+                        text = { Text(text = "Truths")},
                             selected = selectedTabIndex == 0,
                             onClick = { selectedTabIndex = 0 },
 
@@ -158,6 +166,7 @@ fun TruthsList(
     var truthOrDareToEdit by remember { mutableStateOf<TruthOrDare?>(null) }
     var truthOrDareToDelete by remember { mutableStateOf<TruthOrDare?>(null) }
     var showDeleteDialog by remember { mutableStateOf(false) }
+    val view = LocalView.current
 
     if (truthOrDareToEdit != null) {
         EditTruthOrDareDialog(
@@ -180,10 +189,12 @@ fun TruthsList(
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text(text = "Delete Truth Or Dare") },
-            text = { Text(text = "Are you sure you want to delete this truth or dare?") },
+            title = { Text(text = "Delete Truth") },
+            text = { Text(text = "Are you sure you want to delete this truth?") },
             confirmButton = {
                 TextButton(onClick = {
+                    view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                    view.playSoundEffect(SoundEffectConstants.CLICK)
                     coroutineScope.launch {
                         onDelete(truthOrDareToDelete!!)
                         showDeleteDialog = false
@@ -193,7 +204,11 @@ fun TruthsList(
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showDeleteDialog = false }) {
+                TextButton(onClick = {
+                    showDeleteDialog = false
+                    view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                    view.playSoundEffect(SoundEffectConstants.CLICK)
+                }) {
                     Text(text = "No")
                 }
             }
@@ -204,6 +219,7 @@ fun TruthsList(
         items(truths.size) { index ->
             val reversedIndex = truths.lastIndex - index
             val item = truths[reversedIndex]
+            val context = LocalContext.current
 
             Row(
                 modifier = Modifier.padding(8.dp)
@@ -219,6 +235,8 @@ fun TruthsList(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 IconButton(onClick = {
+                    view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                    view.playSoundEffect(SoundEffectConstants.CLICK)
                     truthOrDareToEdit = item
                 }) {
                     Icon(
@@ -228,8 +246,12 @@ fun TruthsList(
                 }
 
                 IconButton(onClick = {
-                    truthOrDareToDelete = item
-                    showDeleteDialog = true
+                    view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                    view.playSoundEffect(SoundEffectConstants.CLICK)
+                    coroutineScope.launch {
+                        truthOrDareToDelete = item
+                        showDeleteDialog = true
+                    }
                 }) {
                     Icon(
                         imageVector = Icons.Filled.Delete,
@@ -254,6 +276,9 @@ fun DaresList(
 ){
     val coroutineScope = rememberCoroutineScope()
     var truthOrDareToEdit by remember { mutableStateOf<TruthOrDare?>(null) }
+    var truthOrDareToDelete by remember { mutableStateOf<TruthOrDare?>(null) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    val view = LocalView.current
 
 
     if (truthOrDareToEdit != null) {
@@ -271,7 +296,35 @@ fun DaresList(
                 }
             },
             onDismiss = { truthOrDareToEdit = null }
+        )
+    }
 
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text(text = "Delete Dare") },
+            text = { Text(text = "Are you sure you want to delete this dare?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                    view.playSoundEffect(SoundEffectConstants.CLICK)
+                    coroutineScope.launch {
+                        onDelete(truthOrDareToDelete!!)
+                        showDeleteDialog = false
+                    }
+                }) {
+                    Text(text = "Yes")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    showDeleteDialog = false
+                    view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                    view.playSoundEffect(SoundEffectConstants.CLICK)
+                }) {
+                    Text(text = "No")
+                }
+            }
         )
     }
 
@@ -303,10 +356,12 @@ fun DaresList(
                 }
 
                 IconButton(onClick = {
+                    view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                    view.playSoundEffect(SoundEffectConstants.CLICK)
                     // Launch a new coroutine using the CoroutineScope
                     coroutineScope.launch {
-                        val truthOrDareToDelete = item
-                        onDelete(truthOrDareToDelete)
+                        truthOrDareToDelete = item
+                        showDeleteDialog = true
                     }
                 }) {
                     Icon(
@@ -330,6 +385,7 @@ fun EditTruthOrDareDialog(
     onDismiss: () -> Unit
 ) {
     var text by remember { mutableStateOf(truthOrDare.text) }
+    val view = LocalView.current
 
     AlertDialog(
         onDismissRequest = onDismiss,

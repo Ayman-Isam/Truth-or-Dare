@@ -1,5 +1,7 @@
 package com.example.truthdare
 
+import android.view.HapticFeedbackConstants
+import android.view.SoundEffectConstants
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -31,16 +33,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import kotlin.random.Random
 
 
@@ -51,10 +51,10 @@ fun HomeScreen(
     navController:NavController,
     repository: TruthOrDareRepository
 ) {
-    val context = LocalContext.current
     var currentText by remember { mutableStateOf("") }
     var isTruth by remember { mutableStateOf(true) }
     var consecutiveCount by remember { mutableStateOf(0) }
+    val view = LocalView.current
 
     val truths = remember { mutableStateOf(emptyList<String>()) }
     val dares = remember { mutableStateOf(emptyList<String>()) }
@@ -78,7 +78,10 @@ fun HomeScreen(
                         fontWeight = FontWeight.SemiBold
                     )
                 }, navigationIcon = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {
+                        //view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                    }) {
                         Icon(
                             painter = painterResource(id = R.drawable.refresh),
                             contentDescription = "Localized description",
@@ -90,6 +93,8 @@ fun HomeScreen(
                             inclusive = true
                         }
                     }
+                        view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
                     }) {
                         Icon(
                             imageVector = Icons.Filled.Add,
@@ -122,6 +127,8 @@ fun HomeScreen(
                     )
                     Button(
                         onClick = {
+                            view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                            view.playSoundEffect(SoundEffectConstants.CLICK)
                             var newTruth: String
                             do {
                                 newTruth = truths.value.random()
@@ -144,6 +151,8 @@ fun HomeScreen(
 
                     Button(
                         onClick = {
+                            view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                            view.playSoundEffect(SoundEffectConstants.CLICK)
                             var newDare: String
                             do {
                                 newDare = dares.value.random()
@@ -166,6 +175,8 @@ fun HomeScreen(
 
                     Button(
                         onClick = {
+                            view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                            view.playSoundEffect(SoundEffectConstants.CLICK)
                             if (consecutiveCount >= 2) {
                                 if (isTruth) {
                                     var newDare: String

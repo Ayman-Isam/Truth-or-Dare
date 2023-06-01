@@ -1,5 +1,7 @@
 package com.example.truthdare
 
+import android.view.HapticFeedbackConstants
+import android.view.SoundEffectConstants
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -59,6 +62,8 @@ fun AddScreen(
     val options = listOf("Truth", "Dare")
     var expanded by remember { mutableStateOf(false) }
     var selectedOptionText by remember { mutableStateOf(options[0]) }
+    val view = LocalView.current
+
 
     MaterialTheme {
         Scaffold(
@@ -74,6 +79,8 @@ fun AddScreen(
                     )
                 }, navigationIcon = {
                     IconButton(onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
                         navController.navigate(route = Screen.Home.route) {
                             popUpTo(Screen.Home.route) {
                                 inclusive = true
@@ -87,7 +94,11 @@ fun AddScreen(
                         )
                     }
                 }, actions = {
-                    IconButton(onClick = { navController.navigate(Screen.View.route) }) {
+                    IconButton(onClick = {
+                        navController.navigate(Screen.View.route)
+                        view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                    }) {
                         Icon(
                             imageVector = Icons.Filled.List,
                             contentDescription = "Localized description",
@@ -152,6 +163,8 @@ fun AddScreen(
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                     Button(onClick = {
+                        view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
                         if (text.text.isEmpty()) {
                             showError = true
                         } else {
